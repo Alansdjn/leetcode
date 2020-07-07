@@ -46,16 +46,11 @@ public class LongestSubstringWithoutRepeatingCharacters {
 			for (int currPosition = 0; currPosition < s.length(); currPosition++) {
 				Integer prevPosition = prevPositionMap.put(s.charAt(currPosition), currPosition);
 				if (prevPosition != null && prevPosition >= begin) {
-					int tmp = currPosition - begin;
-					if (length < tmp) {
-						length = tmp;
-					}
+					length = Math.max(length, currPosition - begin);
 					begin = prevPosition + 1;
 				}
 			}
-			if (length < (s.length() - begin)) {
-				length = s.length() - begin;
-			}
+			length = Math.max(length, s.length() - begin);
 
 			return length;
 		}
