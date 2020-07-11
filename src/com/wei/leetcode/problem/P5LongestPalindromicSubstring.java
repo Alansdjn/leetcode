@@ -12,7 +12,7 @@ package com.wei.leetcode.problem;
  * @author wei wang
  * @date 2020/03/21
  */
-public class LongestPalindromicSubstring {
+public class P5LongestPalindromicSubstring {
 
     /**
      * @param args
@@ -20,7 +20,7 @@ public class LongestPalindromicSubstring {
     public static void main(String[] args) {
         String s = "";
         System.out.println(
-            " Output: " + new LongestPalindromicSubstring().new Solution().longestPalindrome(s) + "\n Excepted: ");
+            " Output: " + new P5LongestPalindromicSubstring().new Solution().longestPalindrome(s) + "\n Excepted: ");
 
     }
 

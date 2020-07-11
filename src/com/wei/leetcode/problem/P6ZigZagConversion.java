@@ -1,10 +1,10 @@
 package com.wei.leetcode.problem;
 
-public class ZigZagConversion {
+public class P6ZigZagConversion {
 
     public static void main(String[] args) {
         String s = "PAYPALISHIRING";
-        String result = new ZigZagConversion().new Solution().convert(s, 4);
+        String result = new P6ZigZagConversion().new Solution().convert(s, 4);
         if (result == null) {
             System.out.println("result: null");
         } else {

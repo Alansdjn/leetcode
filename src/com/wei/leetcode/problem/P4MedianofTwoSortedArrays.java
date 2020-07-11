@@ -20,7 +20,7 @@ package com.wei.leetcode.problem;
  * @author wei wang
  * @date 2020/03/20
  */
-public class MedianofTwoSortedArrays {
+public class P4MedianofTwoSortedArrays {
 
     /**
      * @param args

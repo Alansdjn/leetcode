@@ -19,12 +19,12 @@ package com.wei.leetcode.problem;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TwoSum {
+public class P1TwoSum {
 
 	public static void main(String[] args) {
 		int[] nums = new int[] { 2, 3, 7, 11, 15 };
 		int target = 6;
-		int[] result =  new TwoSum(). new Solution().twoSum(nums, target);
+		int[] result =  new P1TwoSum(). new Solution().twoSum(nums, target);
 		if (result == null) {
 			System.out.println("result: null");
 		} else {

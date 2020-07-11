@@ -22,7 +22,7 @@ import java.util.Map;
  * @author wei wang
  *
  */
-public class LongestSubstringWithoutRepeatingCharacters {
+public class P3LongestSubstringWithoutRepeatingCharacters {
 
 	public static void main(String[] args) {
 		String s1 = "aab";
@@ -30,11 +30,11 @@ public class LongestSubstringWithoutRepeatingCharacters {
 		String s3 = "pwwkew";
 
 		System.out
-				.println(new LongestSubstringWithoutRepeatingCharacters().new Solution().lengthOfLongestSubstring(s1));
+				.println(new P3LongestSubstringWithoutRepeatingCharacters().new Solution().lengthOfLongestSubstring(s1));
 		System.out
-				.println(new LongestSubstringWithoutRepeatingCharacters().new Solution().lengthOfLongestSubstring(s2));
+				.println(new P3LongestSubstringWithoutRepeatingCharacters().new Solution().lengthOfLongestSubstring(s2));
 		System.out
-				.println(new LongestSubstringWithoutRepeatingCharacters().new Solution().lengthOfLongestSubstring(s3));
+				.println(new P3LongestSubstringWithoutRepeatingCharacters().new Solution().lengthOfLongestSubstring(s3));
 
 	}
 

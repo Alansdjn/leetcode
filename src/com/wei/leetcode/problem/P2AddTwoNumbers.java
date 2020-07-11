@@ -16,7 +16,7 @@ package com.wei.leetcode.problem;
  * @author wei wang
  *
  */
-public class AddTwoNumbers {
+public class P2AddTwoNumbers {
 
 	public static void main(String[] args) {
 		ListNode l10 = new ListNode(2);
@@ -32,7 +32,7 @@ public class AddTwoNumbers {
 		l21.next = l22;
 		
 		
-		System.out.println(new AddTwoNumbers(). new Solution().addTwoNumbers(l10, l20));
+		System.out.println(new P2AddTwoNumbers(). new Solution().addTwoNumbers(l10, l20));
 	}
 
 	class Solution {
