@@ -3,7 +3,9 @@ package com.wei.leetcode.problem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wei wang
@@ -15,7 +17,7 @@ public class P153Sum {
      * @param args
      */
     public static void main(String[] args) {
-        int[] nums = {-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6};
+        int[] nums = {-2,0,1,1,2};
         List<List<Integer>> result = new P153Sum().new Solution().threeSum(nums);
         result.forEach(item -> {
             item.forEach(ele -> {
@@ -37,48 +39,34 @@ public class P153Sum {
                 return Collections.emptyList();
             }
 
+            Map<Integer, List<Integer>> valPosMap = new HashMap<>();
+            for (int i = 1; i < nums.length; i++) {
+                valPosMap.putIfAbsent(nums[i], new ArrayList<>());
+                valPosMap.get(nums[i]).add(i);
+            }
+
             List<List<Integer>> result = new ArrayList<>();
-            for (int i = 0, j = nums.length - 1; i + 1 < j;) {
-                if (nums[i] > 0 || nums[j] < 0) {
-                    break;
+
+            for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
+                int j = nums.length - 1;
+                for (; j > i + 1 && nums[j] >= 0; j--) {
+                    int target = -1 * (nums[i] + nums[j]);
+                    if (valPosMap.containsKey(target)) {
+                        final int begin = i;
+                        final int end = j;
+                        if (valPosMap.get(target).stream().filter(idx -> {
+                            return idx > begin && idx < end;
+                        }).findAny().isPresent()) {
+                            result.add(assemble(nums[i], target, nums[j]));
+                            while (j > i + 1 && nums[j - 1] == nums[j]) {
+                                j--;
+                            }
+                        }
+                    }
                 }
 
-                int sum = nums[i] + nums[j];
-                if (sum < 0) {
-                    for (int k = j - 1; k > i; k--) {
-                        if (sum + nums[k] < 0) {
-                            break;
-                        }
-                        if (sum + nums[k] == 0) {
-                            List<Integer> tmp = assemble(nums[i], nums[k], nums[j]);
-                            if (!isRepeat(result, tmp)) {
-                                result.add(tmp);
-                            }
-                            break;
-                        }
-                        if (sum + nums[k] > 0) {
-                            k--;
-                        }
-                    }
+                while (i < nums.length - 1 && nums[i + 1] == nums[i]) {
                     i++;
-                }
-                if (sum >= 0) {
-                    for (int k = i + 1; k < j; k++) {
-                        if (sum + nums[k] < 0) {
-                            k++;
-                        }
-                        if (sum + nums[k] == 0) {
-                            List<Integer> tmp = assemble(nums[i], nums[k], nums[j]);
-                            if (!isRepeat(result, tmp)) {
-                                result.add(tmp);
-                            }
-                            break;
-                        }
-                        if (sum + nums[k] > 0) {
-                            break;
-                        }
-                    }
-                    j--;
                 }
             }
 
@@ -89,29 +77,11 @@ public class P153Sum {
             List<Integer> tmp = new ArrayList<>();
             for (int i = 0; i < a.length; i++) {
                 tmp.add(a[i]);
-                System.out.print(a[i] + " ");
+                // System.out.print(a[i] + " ");
             }
+            // System.out.println();
             return tmp;
         }
 
-        private boolean isRepeat(List<List<Integer>> result, List<Integer> a) {
-            for (int i = 0; i < result.size(); i++) {
-                boolean repeat = false;
-                List<Integer> currList = result.get(i);
-                for (int j = 0; j < currList.size(); j++) {
-                    if (currList.get(j) != a.get(j)) {
-                        repeat = false;
-                        break;
-                    }
-                    repeat = true;
-                }
-                if (repeat) {
-                    System.out.println("isRepeat");
-                    return true;
-                }
-            }
-            System.out.println();
-            return false;
-        }
     }
 }
