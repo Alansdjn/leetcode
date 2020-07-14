@@ -17,7 +17,7 @@ public class P153Sum {
      * @param args
      */
     public static void main(String[] args) {
-        int[] nums = {-2,0,1,1,2};
+        int[] nums = {-5,1,-3,-1,-4,-2,4,-1,-1};
         List<List<Integer>> result = new P153Sum().new Solution().threeSum(nums);
         result.forEach(item -> {
             item.forEach(ele -> {
@@ -39,6 +39,47 @@ public class P153Sum {
                 return Collections.emptyList();
             }
 
+            return threeSum0(nums);
+        }
+
+        private List<List<Integer>> threeSum0(int nums[]) {
+            List<List<Integer>> result = new ArrayList<>();
+            int end = nums.length - 1;
+            for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
+                int j = end;
+                int k = i + 1;
+                int stop_pos = i + 1;
+                for (; j > k && nums[j] >= 0; j--) {
+                    int twoSum = nums[i] + nums[j];
+                    while (k < j && nums[k] + twoSum < 0) {
+                        k++;
+                    }
+                    if (k >= j) {
+                        break;
+                    }
+                    if (nums[k] + twoSum > 0) {
+                        continue;
+                    }
+
+                    int threeSum = nums[k] + twoSum;
+                    if (threeSum == 0) {
+                        result.add(assemble(nums[i], nums[k], nums[j]));
+                        while (j > stop_pos && nums[j - 1] == nums[j]) {
+                            j--;
+                        }
+                    }
+
+                }
+
+                while (i + 1 < nums.length && nums[i + 1] == nums[i]) {
+                    i++;
+                }
+            }
+
+            return result;
+        }
+
+        private List<List<Integer>> threeSumWithHashMap(int nums[]) {
             Map<Integer, List<Integer>> valPosMap = new HashMap<>();
             for (int i = 1; i < nums.length; i++) {
                 valPosMap.putIfAbsent(nums[i], new ArrayList<>());
