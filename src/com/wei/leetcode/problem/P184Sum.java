@@ -3,22 +3,21 @@ package com.wei.leetcode.problem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wei wang
- * @date 2020/07/12
+ * @date 2020/07/14
  */
-public class P153Sum {
+public class P184Sum {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        int[] nums = {-5, 1, -3, -1, -4, -2, 4, -1, -1};
-        List<List<Integer>> result = new P153Sum().new Solution().threeSum(nums);
+        int[] nums = {-1, -5, -5, -3, 2, 5, 0, 4};
+        int target = -7;
+        List<List<Integer>> result = new P184Sum().new Solution().fourSum(nums, target);
         result.forEach(item -> {
             item.forEach(ele -> {
                 System.out.print(ele + " ");
@@ -28,18 +27,26 @@ public class P153Sum {
     }
 
     class Solution {
-        public List<List<Integer>> threeSum(int[] nums) {
-            if (nums.length < 3) {
+        public List<List<Integer>> fourSum(int[] nums, int target) {
+            if (nums.length < 4) {
                 return Collections.emptyList();
             }
 
             Arrays.sort(nums);
 
-            if (nums[0] > 0 || nums[nums.length - 1] < 0) {
-                return Collections.emptyList();
+            List<List<Integer>> result = new ArrayList<>();
+            for (int i = 0; i < nums.length - 3; i++) {
+                List<List<Integer>> threeSumResult = threeSum(nums, i + 1, target - nums[i]);
+                final int curr = nums[i];
+                threeSumResult.forEach(item -> {
+                    item.add(0, curr);
+                });
+                result.addAll(threeSumResult);
+
+                i = skipEqElement(nums, i);
             }
 
-            return threeSum(nums, 0, 0);
+            return result;
         }
 
         private List<List<Integer>> threeSum(int nums[], int begin, int target) {
@@ -90,40 +97,6 @@ public class P153Sum {
             }
             return tmp;
         }
-
-        private List<List<Integer>> threeSumWithHashMap(int nums[]) {
-            Map<Integer, List<Integer>> valPosMap = new HashMap<>();
-            for (int i = 1; i < nums.length; i++) {
-                valPosMap.putIfAbsent(nums[i], new ArrayList<>());
-                valPosMap.get(nums[i]).add(i);
-            }
-
-            List<List<Integer>> result = new ArrayList<>();
-
-            for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
-                int j = nums.length - 1;
-                for (; j > i + 1 && nums[j] >= 0; j--) {
-                    int target = -1 * (nums[i] + nums[j]);
-                    if (valPosMap.containsKey(target)) {
-                        final int begin = i;
-                        final int end = j;
-                        if (valPosMap.get(target).stream().filter(idx -> {
-                            return idx > begin && idx < end;
-                        }).findAny().isPresent()) {
-                            result.add(assemble(nums[i], target, nums[j]));
-                            while (j > i + 1 && nums[j - 1] == nums[j]) {
-                                j--;
-                            }
-                        }
-                    }
-                }
-
-                while (i < nums.length - 1 && nums[i + 1] == nums[i]) {
-                    i++;
-                }
-            }
-
-            return result;
-        }
     }
+
 }
