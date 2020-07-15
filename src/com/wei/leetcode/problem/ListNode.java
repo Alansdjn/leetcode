@@ -1,24 +1,31 @@
 package com.wei.leetcode.problem;
 
 public class ListNode {
-	int val;
-	ListNode next;
+    int val;
+    ListNode next;
 
-	ListNode(int x) {
-		val = x;
-	}
+    ListNode() {}
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(val);
-		ListNode node = next;
-		while (node != null) {
-			sb.append(node.val);
-			node = node.next;
-		}
+    ListNode(int val) {
+        this.val = val;
+    }
 
-		return sb.reverse().toString();
-	}
+    ListNode(int val, ListNode next) {
+        this.val = val;
+        this.next = next;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(val);
+        ListNode node = next;
+        while (node != null) {
+            sb.append(node.val);
+            node = node.next;
+        }
+
+        return sb.reverse().toString();
+    }
 
 }
