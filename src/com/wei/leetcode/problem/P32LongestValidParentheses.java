@@ -1,9 +1,8 @@
 package com.wei.leetcode.problem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * @author wei wang
@@ -28,25 +27,25 @@ public class P32LongestValidParentheses {
         public int longestValidParentheses(String s) {
             int result = 0;
             Map<Integer, Integer> posMatchCnt = new HashMap<>();
-            List<Node> stack = new ArrayList<>(s.length());
+            Stack<Node> stack = new Stack<>();
 
             for (int pos = 0; pos < s.length(); pos++) {
                 char currCh = s.charAt(pos);
                 if (currCh == LEFT_PARENTHESIS || stack.isEmpty()) {
-                    stack.add(new Node(currCh, pos));
+                    stack.push(new Node(currCh, pos));
                     continue;
                 }
 
-                Node prevNode = stack.get(stack.size() - 1);
+                Node prevNode = stack.peek();
                 if (prevNode.val == RIGHT_PARENTHESIS) {
-                    stack.add(new Node(currCh, pos));
+                    stack.push(new Node(currCh, pos));
                     continue;
                 }
 
                 int length = 2 + posMatchCnt.getOrDefault(pos - 1, 0) + posMatchCnt.getOrDefault(prevNode.pos - 1, 0);
                 posMatchCnt.put(pos, length);
                 result = (result < length ? length : result);
-                stack.remove(stack.size() - 1);
+                stack.pop();
             }
 
             return result;
