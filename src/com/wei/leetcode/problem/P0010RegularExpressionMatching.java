@@ -4,7 +4,7 @@ package com.wei.leetcode.problem;
  * @author wei wang
  * @date 2020/07/10
  */
-public class P10RegularExpressionMatching {
+public class P0010RegularExpressionMatching {
 
     /**
      * @param args
@@ -14,7 +14,7 @@ public class P10RegularExpressionMatching {
         String p = "mis*is*p*.";
         System.out.println("s = " + s);
         System.out.println("p = " + p);
-        System.out.println("Output: " + new P10RegularExpressionMatching().new Solution().isMatch(s, p));
+        System.out.println("Output: " + new P0010RegularExpressionMatching().new Solution().isMatch(s, p));
 
     }
 
