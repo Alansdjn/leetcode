@@ -10,7 +10,7 @@ public class P55JumpGame {
      * @param args
      */
     public static void main(String[] args) {
-        int[] nums = {2,3,1,1,4};
+        int[] nums = {2, 3, 1, 1, 4};
         System.out.println(new P55JumpGame().new Solution().canJump(nums));
 
     }
@@ -29,17 +29,14 @@ public class P55JumpGame {
             for (int i = nums.length - 2; i >= 0; i--) {
                 int curr = nums[i];
                 nums[i] = 0;
-                for (int j = 1 + falseLength; j <= curr; j++) {
+                for (int j = 1 + falseLength; i + j < nums.length && j <= curr; j++) {
                     if (nums[i + j] == 1) {
                         nums[i] = 1;
                         break;
                     }
                 }
-                if (nums[i] == 0) {
-                    falseLength++;
-                } else {
-                    falseLength = 0;
-                }
+
+                falseLength = (nums[i] == 1) ? 0 : falseLength + 1;
             }
             return nums[0] == 1;
         }
