@@ -8,20 +8,21 @@ import java.util.List;
  * @date 2020/08/03
  */
 public class P51NQueens {
+    static int deep = 0;
 
     /**
      * @param args
      */
     public static void main(String[] args) {
-        int n = 4;
+        int n = 7;
         List<List<String>> r = new P51NQueens().new Solution().solveNQueens(n);
         System.out.println("[");
         r.forEach(item -> {
-            System.out.print("[");
+            System.out.println("\t[");
             item.forEach(e -> {
-                System.out.println(e + ",");
+                System.out.println("\t " + e + ",");
             });
-            System.out.print("],");
+            System.out.print("\t],");
             System.out.println();
         });
         System.out.println("]");
@@ -29,47 +30,42 @@ public class P51NQueens {
     }
 
     class Solution {
+
         public List<List<String>> solveNQueens(int n) {
             Q[] nQueens = new Q[n];
             for (int i = 0; i < n; i++) {
                 Q q = new Q(i, 0);
                 nQueens[i] = q;
             }
-            // String[][] matrix = new String[n][n];
-            // for (int i = 0; i < matrix.length; i++) {
-            // for (int j = 0; j < matrix[i].length; j++) {
-            // matrix[i][j] = ".";
-            // if (j == 0) {
-            // matrix[i][j] = "Q";
-            // }
-            // }
-            // }
+
             return solveNQueens(nQueens);
         }
 
         public List<List<String>> solveNQueens(Q[] nQueens) {
             int n = nQueens.length;
+
+            System.out.print(deep++);
+            System.out.print(": [ ");
+            for (int i = 0; i < n; i++) {
+                System.out.print("(" + nQueens[i].i + ", " + nQueens[i].j + "), ");
+            }
+            System.out.println("]");
+
+            List<List<String>> result = new LinkedList<>();
             if (checkColumn(nQueens) && checkDiagonal(nQueens)) {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < n; i++) {
                     sb.append('.');
                 }
-                // String nPoints = sb.toString();
 
-                List<List<String>> result = new LinkedList<>();
                 List<String> r = new LinkedList<>();
                 for (int i = 0; i < n; i++) {
-                    // StringBuilder sb = new StringBuilder();
-                    // for (int j = 0; j < n; j++) {
-                    // sb.sb.append(matrix[i][j]);
-                    // }
                     Q q = nQueens[i];
-                    sb.replace(q.j - 1, q.j, "Q");
+                    sb.replace(q.j, q.j + 1, "Q");
                     r.add(sb.toString());
-                    sb.replace(q.j - 1, q.j, ".");
+                    sb.replace(q.j, q.j + 1, ".");
                 }
                 result.add(r);
-                return result;
             }
 
             int carry = 1;
@@ -82,88 +78,39 @@ public class P51NQueens {
                     carry = 0;
                 }
                 q.j = (q.j + 1) % n;
-                //
-                // for (int j = 0; j < n; j++) {
-                // if ("Q".equals(matrix[i][j])) {
-                // matrix[i][j] = ".";
-                // matrix[i][(j + 1) % n] = "Q";
-                // if (j + 1 < n) {
-                // carry = 0;
-                // }
-                // break;
-                // }
-                // }
+            }
+            if (carry == 1) {
+                return result;
             }
 
-            return solveNQueens(matrix);
+            List<List<String>> r = solveNQueens(nQueens);
+            result.addAll(r);
+            return result;
         }
 
-        private boolean checkColumn(String[][] matrix) {
-            int n = matrix.length;
-            for (int i = 0; i < n; i++) {
-                int cnt = 0;
-                for (int j = 0; j < n; j++) {
-                    if ("Q".equals(matrix[j][i])) {
-                        cnt += 1;
+        private boolean checkColumn(Q[] nQueens) {
+            int n = nQueens.length;
+            for (int i = 0; i < n - 1; i++) {
+                for (int j = i + 1; j < n; j++) {
+                    if (nQueens[i].j == nQueens[j].j) {
+                        return false;
                     }
-                }
-                if (cnt > 1) {
-                    return false;
                 }
             }
             return true;
         }
 
-        private boolean checkDiagonal(String[][] matrix) {
-            for (int i = 0; i < matrix.length; i++) {
-                int j = 0;
-                while (".".equals(matrix[i][j])) {
-                    j++;
-                }
+        private boolean checkDiagonal(Q[] nQueens) {
+            int n = nQueens.length;
+            for (int i = 0; i < n - 1; i++) {
                 // /
-                // i + j <= 7
-                int cnt = 0;
-                if (i + j <= 7) {
-                    for (int n = i + j; n >= 0; n--) {
-                        int m = matrix.length - 1 - n;
-                        if ("Q".equals(matrix[m][n])) {
-                            cnt += 1;
-                        }
-                    }
-                } else {
-                    // i + j > 7
-                    for (int n = matrix.length - 1; n >= i + j - matrix.length + 1; n--) {
-                        int m = i + j - n;
-                        if ("Q".equals(matrix[m][n])) {
-                            cnt += 1;
-                        }
-                    }
-                }
-                if (cnt > 1) {
-                    return false;
-                }
-
+                int diagonalLeft = nQueens[i].i + nQueens[i].j;
                 // \
-                cnt = 0;
-                if (i >= j) {
-                    // i >= j
-                    for (int n = 0; n < matrix.length - 1 - (i + j); n++) {
-                        int m = i - j - n;
-                        if ("Q".equals(matrix[m][n])) {
-                            cnt += 1;
-                        }
+                int diagonalRight = nQueens[i].j - nQueens[i].i;
+                for (int j = i + 1; j < n; j++) {
+                    if (diagonalLeft == (nQueens[j].i + nQueens[j].j) || diagonalRight == nQueens[j].j - nQueens[j].i) {
+                        return false;
                     }
-                } else {
-                    // i < j
-                    for (int n = j - i; n < matrix.length - 1; n++) {
-                        int m = n - (j - i);
-                        if ("Q".equals(matrix[m][n])) {
-                            cnt += 1;
-                        }
-                    }
-                }
-                if (cnt > 1) {
-                    return false;
                 }
             }
             return true;
