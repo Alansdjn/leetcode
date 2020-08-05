@@ -1,7 +1,9 @@
 package com.wei.leetcode.problem;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wei wang
@@ -14,8 +16,9 @@ public class P51NQueens {
      * @param args
      */
     public static void main(String[] args) {
-        int n = 7;
+        int n = 9;
         List<List<String>> r = new P51NQueens().new Solution().solveNQueens(n);
+        System.out.println(n + " : " + r.size());
         System.out.println("[");
         r.forEach(item -> {
             System.out.println("\t[");
@@ -31,99 +34,86 @@ public class P51NQueens {
 
     class Solution {
 
+        Set<Integer> columnSet = new HashSet<>();
+        Set<Integer> diagonalLeftSet = new HashSet<>();
+        Set<Integer> diagonalRightSet = new HashSet<>();
+
         public List<List<String>> solveNQueens(int n) {
             Q[] nQueens = new Q[n];
             for (int i = 0; i < n; i++) {
-                Q q = new Q(i, 0);
-                nQueens[i] = q;
+                nQueens[i] = new Q(i, 0);
             }
 
-            return solveNQueens(nQueens);
+            return solveNQueens(nQueens, 0);
         }
 
-        public List<List<String>> solveNQueens(Q[] nQueens) {
-            int n = nQueens.length;
+        public List<List<String>> solveNQueens(Q[] nQueens, int row) {
 
-            System.out.print(deep++);
-            System.out.print(": [ ");
-            for (int i = 0; i < n; i++) {
-                System.out.print("(" + nQueens[i].i + ", " + nQueens[i].j + "), ");
+            int n = nQueens.length;
+            if (row == n) {
+                return createResult(nQueens, n);
             }
-            System.out.println("]");
 
             List<List<String>> result = new LinkedList<>();
-            if (checkColumn(nQueens) && checkDiagonal(nQueens)) {
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < n; i++) {
-                    sb.append('.');
+            Q q = nQueens[row];
+            for (int column = 0; column < n; column++) {
+                // |
+                if (columnSet.contains(column)) {
+                    continue;
                 }
+                // /
+                int diagonalLeft = q.row + column;
+                if (diagonalLeftSet.contains(diagonalLeft)) {
+                    continue;
+                }
+                // \
+                int diagonalRight = column - q.row;
+                if (diagonalRightSet.contains(diagonalRight)) {
+                    continue;
+                }
+                columnSet.add(column);
+                diagonalLeftSet.add(diagonalLeft);
+                diagonalRightSet.add(diagonalRight);
 
-                List<String> r = new LinkedList<>();
-                for (int i = 0; i < n; i++) {
-                    Q q = nQueens[i];
-                    sb.replace(q.j, q.j + 1, "Q");
-                    r.add(sb.toString());
-                    sb.replace(q.j, q.j + 1, ".");
-                }
-                result.add(r);
+                q.column = column;
+                result.addAll(solveNQueens(nQueens, row + 1));
+
+                columnSet.remove(column);
+                diagonalLeftSet.remove(diagonalLeft);
+                diagonalRightSet.remove(diagonalRight);
             }
 
-            int carry = 1;
-            for (int i = 0; i < n; i++) {
-                if (carry == 0) {
-                    break;
-                }
-                Q q = nQueens[i];
-                if (q.j + 1 < n) {
-                    carry = 0;
-                }
-                q.j = (q.j + 1) % n;
-            }
-            if (carry == 1) {
-                return result;
-            }
-
-            List<List<String>> r = solveNQueens(nQueens);
-            result.addAll(r);
             return result;
         }
 
-        private boolean checkColumn(Q[] nQueens) {
-            int n = nQueens.length;
-            for (int i = 0; i < n - 1; i++) {
-                for (int j = i + 1; j < n; j++) {
-                    if (nQueens[i].j == nQueens[j].j) {
-                        return false;
-                    }
-                }
+        private List<List<String>> createResult(Q[] nQueens, int n) {
+            List<List<String>> result = new LinkedList<>();
+            List<String> r = new LinkedList<>();
+            result.add(r);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < n; i++) {
+                sb.append('.');
             }
-            return true;
+
+            for (int i = 0; i < n; i++) {
+                Q q = nQueens[i];
+                sb.replace(q.column, q.column + 1, "Q");
+                r.add(sb.toString());
+                sb.replace(q.column, q.column + 1, ".");
+            }
+            return result;
         }
 
-        private boolean checkDiagonal(Q[] nQueens) {
-            int n = nQueens.length;
-            for (int i = 0; i < n - 1; i++) {
-                // /
-                int diagonalLeft = nQueens[i].i + nQueens[i].j;
-                // \
-                int diagonalRight = nQueens[i].j - nQueens[i].i;
-                for (int j = i + 1; j < n; j++) {
-                    if (diagonalLeft == (nQueens[j].i + nQueens[j].j) || diagonalRight == nQueens[j].j - nQueens[j].i) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
     }
 
     class Q {
-        int i;
-        int j;
+        int row;
+        int column;
 
-        public Q(int i, int j) {
-            this.i = i;
-            this.j = j;
+        public Q(int row, int column) {
+            this.row = row;
+            this.column = column;
         }
     }
 }
