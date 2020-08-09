@@ -14,11 +14,26 @@ public class P46Permutations {
      * @param args
      */
     public static void main(String[] args) {
-        int[] nums = {1,2,3,4,5,6};
-        new P46Permutations().new Solution().permute(nums).forEach(item -> {
-            System.out.println(item);
-        });;
+        int[] nums = null;
+        for (int i = 1; i < 10; i++) {
+            nums = new int[i];
+            for (int j = 0; j < i; j++) {
+                nums[j] = j + 1;
+            }
+            List<List<Integer>> r = new P46Permutations().new Solution().permute(nums);
+            System.out.println(i + " : " + N(i) + " : " + r.size());
+            // r.forEach(item -> {
+            // System.out.println(item);
+            // });
+        }
+    }
 
+    private static int N(int i) {
+        int r = 1;
+        for (; i > 0; i--) {
+            r *= i;
+        }
+        return r;
     }
 
     class Solution {

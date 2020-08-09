@@ -14,20 +14,60 @@ public class P60PermutationSequence {
      * @param args
      */
     public static void main(String[] args) {
-        String r = new P60PermutationSequence().new Solution().getPermutation(4, 9);
+        String r = new P60PermutationSequence().new Solution().getPermutation(3, 3);
         System.out.println(r);
 
     }
 
     class Solution {
-        int cnt = 0;
-
-        private int inc() {
-            cnt += 1;
-            return cnt;
-        }
 
         public String getPermutation(int n, int k) {
+            int[] cnt = new int[n];
+            cnt[0] = 1;
+            for (int i = 1; i < n; i++) {
+                cnt[i] = (i + 1) * cnt[i - 1];
+            }
+            int[] nums = new int[n];
+            for (int i = 0; i < n; i++) {
+                nums[i] = i + 1;
+            }
+
+            //int oriK = k;
+            for (int i = n - 1; i >= 0 && k > 0; i--) {
+                if (cnt[i] > k) {
+                    continue;
+                }
+
+                int a = k / cnt[i] + (k % cnt[i] == 0 ? 0 : 1);
+                k = k - (a - 1) * cnt[i];
+                if (a > 1) {
+                    shift(nums, n - 1 - i - 2 + a, n - 1 - i - 1);
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < n; j++) {
+                sb.append(nums[j]);
+            }
+            
+            return sb.toString();
+//
+//            for (int i = 0; i < n; i++) {
+//                nums[i] = i + 1;
+//            }
+//            List<List<Integer>> r = permute(nums, oriK);
+//            StringBuilder sb = new StringBuilder();
+//            r.forEach(item -> {
+//                item.forEach(e -> {
+//                    sb.append(e);
+//                });
+//            });
+//            return sb.toString();
+        }
+
+        // ================================================
+
+        public String getPermutation_1(int n, int k) {
             int[] nums = new int[n];
             for (int i = 0; i < n; i++) {
                 nums[i] = i + 1;
@@ -65,6 +105,13 @@ public class P60PermutationSequence {
                 shift(nums, begin, i);
             }
             return result;
+        }
+
+        int cnt = 0;
+
+        private int inc() {
+            cnt += 1;
+            return cnt;
         }
 
         private void shift(int[] nums, int from, int to) {
