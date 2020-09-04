@@ -1,8 +1,7 @@
 package com.wei.leetcode.problem;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.Queue;
 
 /**
  * @author wei wang
@@ -20,56 +19,52 @@ public class P101SymmetricTree {
 
     class Solution {
         public boolean isSymmetric(TreeNode root) {
-            List<TreeNode> nextLevel = new LinkedList<>();
-            nextLevel.add(root);
-            return isSymmetric(nextLevel);
+            if (root == null) {
+                return true;
+            }
+            // return isSymmetricIte(root.left, root.right);
+            return isSymmetricRec(root);
         }
 
-        private boolean isSymmetric(List<TreeNode> levelNodes) {
-
-            Stack<TreeNode> stack = new Stack<>();
-            List<TreeNode> nextLevel = new LinkedList<>();
-
-            boolean allNull = true;
-            int i = 0;
-            for (; i < levelNodes.size() / 2; i++) {
-                TreeNode curr = levelNodes.get(i);
-                stack.push(curr);
-                addNextLevelNodes(nextLevel, curr);
-                if (allNull) {
-                    allNull = curr != null && (curr.left != null || curr.right != null);
-                }
+        private boolean isSymmetricIte(TreeNode left, TreeNode right) {
+            if (left == null && right == null) {
+                return true;
             }
-            if (levelNodes.size() % 2 == 1) {
-                TreeNode curr = levelNodes.get(i++);
-                addNextLevelNodes(nextLevel, curr);
-                if (allNull) {
-                    allNull = curr != null && (curr.left != null || curr.right != null);
-                }
+            if (left == null || right == null) {
+                return false;
             }
-            for (; i < levelNodes.size(); i++) {
-                TreeNode curr = levelNodes.get(i);
-                TreeNode stackCurr = stack.pop();
-                if (curr != stackCurr) {
+            if (left.val != right.val) {
+                return false;
+            }
+
+            return isSymmetricIte(left.left, right.left) && isSymmetricIte(left.right, right.right);
+        }
+
+        private boolean isSymmetricRec(TreeNode root) {
+            Queue<TreeNode> leftQue = new LinkedList<>();
+            leftQue.add(root.left);
+            Queue<TreeNode> rightQue = new LinkedList<>();
+            rightQue.add(root.right);
+
+            do {
+                TreeNode left = leftQue.poll();
+                TreeNode right = rightQue.poll();
+                if (left == null && right == null) {
+                    continue;
+                }
+                if (left == null || right == null) {
                     return false;
                 }
-                addNextLevelNodes(nextLevel, curr);
-                if (allNull) {
-                    allNull = curr != null && (curr.left != null || curr.right != null);
+                if (left.val != right.val) {
+                    return false;
                 }
-            }
+                leftQue.add(left.left);
+                leftQue.add(left.right);
+                rightQue.add(right.right);
+                rightQue.add(right.left);
+            } while (!leftQue.isEmpty() && !rightQue.isEmpty());
 
-            return allNull ? true : isSymmetric(levelNodes);
-        }
-
-        private void addNextLevelNodes(List<TreeNode> nextLevel, TreeNode curr) {
-            if (curr == null) {
-                nextLevel.add(null);
-                nextLevel.add(null);
-            } else {
-                nextLevel.add(curr.left);
-                nextLevel.add(curr.right);
-            }
+            return leftQue.isEmpty() && rightQue.isEmpty();
         }
     }
 }

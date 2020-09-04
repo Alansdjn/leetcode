@@ -14,10 +14,10 @@ public class P94BinaryTreeInorderTraversal {
      */
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
-        // TreeNode left = new TreeNode(3);
-        // TreeNode right = new TreeNode(2);
-        // root.right = right;
-        // right.left = left;
+        TreeNode left = new TreeNode(3);
+        TreeNode right = new TreeNode(2);
+        root.right = right;
+        right.left = left;
 
         new P94BinaryTreeInorderTraversal().new Solution().inorderTraversal(root).forEach(ele -> {
             System.out.print(ele + ", ");
