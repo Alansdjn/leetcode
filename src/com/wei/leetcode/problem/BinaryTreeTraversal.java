@@ -18,7 +18,7 @@ public class BinaryTreeTraversal {
 
     }
 
-    public List<Integer> preorder(TreeNode root) {
+    public static List<Integer> preorder(TreeNode root) {
         List<Integer> r = new LinkedList<>();
 
         if (root == null) {
@@ -39,7 +39,7 @@ public class BinaryTreeTraversal {
 
     }
 
-    public List<Integer> inorder(TreeNode root) {
+    public static List<Integer> inorder(TreeNode root) {
         List<Integer> r = new LinkedList<>();
 
         if (root == null) {
@@ -59,7 +59,7 @@ public class BinaryTreeTraversal {
         return r;
     }
 
-    public List<Integer> postorder(TreeNode root) {
+    public static List<Integer> postorder(TreeNode root) {
         List<Integer> r = new LinkedList<>();
 
         if (root == null) {
@@ -80,7 +80,7 @@ public class BinaryTreeTraversal {
 
     }
 
-    public List<Integer> levelorder(TreeNode root) {
+    public static List<Integer> levelorder(TreeNode root) {
         List<Integer> r = new LinkedList<>();
 
         if (root == null) {
