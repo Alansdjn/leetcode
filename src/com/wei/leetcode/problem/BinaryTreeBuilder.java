@@ -7,14 +7,14 @@ import java.util.Queue;
  * @author wei wang
  * @date 2020/09/04
  */
-public class BuildBinaryTree {
+public class BinaryTreeBuilder {
 
     /**
      * @param args
      */
     public static void main(String[] args) {
         Integer[] nums = {1, 2, 3, 4, null, null, 5};
-        TreeNode root = BuildBinaryTree.build(nums);
+        TreeNode root = BinaryTreeBuilder.build(nums);
 
         BinaryTreeTraversal.levelorder(root).forEach(item -> {
             System.out.println(item);
